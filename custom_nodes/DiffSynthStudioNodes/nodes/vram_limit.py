@@ -1,4 +1,5 @@
 import torch
+from ..type_defs import VRAM_LIMIT
 
 
 class VRAMLimitNode:
@@ -6,11 +7,10 @@ class VRAMLimitNode:
     def INPUT_TYPES(cls):
         return {"required": {
             "device": ("STRING", {"default": "cuda"}),
-            "buffer_size": ("FLOAT", {"default": 4.0, "min": 0.0, "max": 64.0, "step": 0.5,
-                                        "tooltip": "Reserved VRAM in GB. Use 8 GB or more for MiniMax pipelines."}),
+            "buffer_size": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 10, "step": 0.5}),
         }}
 
-    RETURN_TYPES = ("FLOAT",)
+    RETURN_TYPES = (VRAM_LIMIT,)
     RETURN_NAMES = ("vram_limit",)
     FUNCTION = "execute"
     CATEGORY = "DiffSynth/config"

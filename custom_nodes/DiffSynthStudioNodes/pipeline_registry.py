@@ -10,7 +10,7 @@ class PipelineMeta:
     pipeline_class_path: str
     module_attr: str
     output_type: str
-    default_buffer_size: float = 4.0
+    default_buffer_size: float = 0.5
     audio_sample_rate: int = 44100
 
 
@@ -32,8 +32,8 @@ PIPELINE_REGISTRY = {
         PipelineMeta("WanVideo", "Wan Video", "diffsynth.pipelines.wan_video.WanVideoPipeline", "video_dit", "video"),
         PipelineMeta("LingBotVideo", "LingBot Video", "diffsynth.pipelines.lingbot_video.LingBotVideoPipeline", "dit", "video"),
         PipelineMeta("LTX2AudioVideo", "LTX-2 Audio Video", "diffsynth.pipelines.ltx2_audio_video.LTX2AudioVideoPipeline", "dit", "audio_video"),
-        PipelineMeta("MiniMaxH3", "MiniMax H3", "diffsynth.pipelines.minimax_h3_audio_video.MiniMaxH3Pipeline", "dit", "audio_video", 8.0),
-        PipelineMeta("MiniMaxMusic3", "MiniMax Music 3", "diffsynth.pipelines.minimax_music3.MiniMaxMusic3Pipeline", "dit", "audio", 8.0, 32000),
+        PipelineMeta("MiniMaxH3", "MiniMax H3", "diffsynth.pipelines.minimax_h3_audio_video.MiniMaxH3Pipeline", "dit", "audio_video", 2.0),
+        PipelineMeta("MiniMaxMusic3", "MiniMax Music 3", "diffsynth.pipelines.minimax_music3.MiniMaxMusic3Pipeline", "dit", "audio", 2.0, 32000),
         PipelineMeta("MovaAudioVideo", "MOVA Audio Video", "diffsynth.pipelines.mova_audio_video.MovaAudioVideoPipeline", "video_dit", "audio_video"),
         PipelineMeta("AceStep", "ACE-Step", "diffsynth.pipelines.ace_step.AceStepPipeline", "dit", "audio", 4.0, 48000),
     ]

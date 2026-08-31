@@ -6,13 +6,7 @@ from ..type_defs import MODEL_CONFIG, ANY
 class PipelineOthersBuilderNode:
     @classmethod
     def INPUT_TYPES(cls):
-        # Keep these inputs optional: this node is also the escape hatch for
-        # pipeline-specific scalar flags accepted by from_pretrained.
         options = {f"config_{i}": (MODEL_CONFIG,) for i in range(1, 5)}
-        options.update({"enable_npu_patch": ("BOOLEAN", {"default": True}),
-                        "redirect_common_files": ("BOOLEAN", {"default": True}),
-                        "use_usp": ("BOOLEAN", {"default": False}),
-                        "stage2_lora_strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01})})
         return {"required": {"pipeline_type": (get_pipeline_type_names(),)},
                 "optional": options}
 

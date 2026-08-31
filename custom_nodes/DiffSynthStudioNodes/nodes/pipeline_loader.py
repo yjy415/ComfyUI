@@ -2,7 +2,7 @@ import hashlib
 import json
 import torch
 from ..pipeline_registry import get_pipeline_class, get_pipeline_type_names, get_from_pretrained_config_params
-from ..type_defs import MODEL_CONFIG_LIST, PIPE, ANY
+from ..type_defs import MODEL_CONFIG_LIST, PIPE, ANY, VRAM_LIMIT
 
 
 def _dtype(name):
@@ -17,8 +17,10 @@ class PipelineLoaderNode:
             "torch_dtype": (["bfloat16", "float16", "float32"], {"default": "bfloat16"}),
             "device": (["cuda", "cpu"], {"default": "cuda"}),
             "model_configs": (MODEL_CONFIG_LIST,),
-            "vram_limit": ("FLOAT", {"default": 0.0}),
-        }, "optional": {"others": (ANY,)}}
+        }, "optional": {
+            "others": (ANY,),
+            "vram_limit": (VRAM_LIMIT,),
+        }}
 
     RETURN_TYPES = (PIPE,)
     RETURN_NAMES = ("pipe",)
@@ -42,17 +44,17 @@ class PipelineLoaderNode:
         encoded = json.dumps(payload, sort_keys=True, default=str).encode("utf-8")
         return hashlib.sha256(encoded).hexdigest()
 
-    def execute(self, pipeline_type, torch_dtype, device, model_configs, vram_limit, others=None):
+    def execute(self, pipeline_type, torch_dtype, device, model_configs, others=None, vram_limit=0.0):
         cls = get_pipeline_class(pipeline_type)
         kwargs = {"torch_dtype": _dtype(torch_dtype), "device": device,
                   "model_configs": model_configs, "vram_limit": vram_limit}
         config_names = get_from_pretrained_config_params(pipeline_type)
         if isinstance(others, dict):
             kwargs.update(others)
-        elif others is not None:
-            values = others if isinstance(others, list) else [others]
-            for name, value in zip(config_names, values):
-                kwargs[name] = value
+        # elif others is not None:
+        #     values = others if isinstance(others, list) else [others]
+        #     for name, value in zip(config_names, values):
+        #         kwargs[name] = value
         pipe = cls.from_pretrained(**kwargs)
         # Useful for diagnostics and downstream extensions; LoRA loading does
         # not depend on this marker and auto-detects the target module.

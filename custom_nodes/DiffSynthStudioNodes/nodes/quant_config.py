@@ -1,3 +1,4 @@
+import dataclasses
 from ..type_defs import QUANT_CONFIG
 
 METHODS = [
@@ -21,14 +22,10 @@ class QuantizationConfigNode:
         return {"required": {
             "method": (METHODS, {"default": METHODS[0]}),
             "mode": (["dynamic", "dequant_once"], {"default": "dynamic"}),
-            "enable_mixed": ("BOOLEAN", {"default": False}),
         }, "optional": {
             "target_modules": ("STRING", {"default": "", "multiline": True}),
             "exclude_modules": ("STRING", {"default": "", "multiline": True}),
             "load_prequantized": ("BOOLEAN", {"default": False}),
-            "method_2": (METHODS, {"default": METHODS[2]}),
-            "target_modules_2": ("STRING", {"default": "", "multiline": True}),
-            "exclude_modules_2": ("STRING", {"default": "", "multiline": True}),
         }}
 
     RETURN_TYPES = (QUANT_CONFIG,)
@@ -36,14 +33,39 @@ class QuantizationConfigNode:
     FUNCTION = "execute"
     CATEGORY = "DiffSynth/config"
 
-    def execute(self, method, mode, enable_mixed=False, target_modules="", exclude_modules="",
-                load_prequantized=False, method_2=METHODS[2], target_modules_2="", exclude_modules_2=""):
-        from diffsynth.core.quant import QuantizeConfig, MixedQuantizeConfig
-        first = QuantizeConfig(method=method, mode=mode, target_modules=_modules(target_modules),
+    def execute(self, method, mode, target_modules="", exclude_modules="",
+                load_prequantized=False):
+        from diffsynth.core.quant import QuantizeConfig
+        return (QuantizeConfig(method=method, mode=mode,
+                               target_modules=_modules(target_modules),
                                exclude_modules=_modules(exclude_modules),
-                               load_prequantized=False if enable_mixed else load_prequantized)
-        if enable_mixed:
-            second = QuantizeConfig(method=method_2, mode=mode, target_modules=_modules(target_modules_2),
-                                    exclude_modules=_modules(exclude_modules_2), load_prequantized=False)
-            return (MixedQuantizeConfig(configs=[first, second], load_prequantized=load_prequantized),)
-        return (first,)
+                               load_prequantized=load_prequantized),)
+
+
+class MixedQuantizeConfigNode:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "quant_config_1": (QUANT_CONFIG,),
+            "load_prequantized": ("BOOLEAN", {"default": False}),
+        }, "optional": {
+            f"quant_config_{i}": (QUANT_CONFIG,) for i in range(2, 5)
+        }}
+
+    RETURN_TYPES = (QUANT_CONFIG,)
+    RETURN_NAMES = ("quant_config",)
+    FUNCTION = "execute"
+    CATEGORY = "DiffSynth/config"
+
+    def execute(self, quant_config_1, load_prequantized=False, **kwargs):
+        from diffsynth.core.quant import MixedQuantizeConfig, QuantizeConfig
+        configs = [quant_config_1] + [
+            kwargs[name] for name in sorted(kwargs) if kwargs[name] is not None
+        ]
+        configs = [
+            dataclasses.replace(c, load_prequantized=False)
+            if isinstance(c, QuantizeConfig) else c
+            for c in configs
+        ]
+        return (MixedQuantizeConfig(configs=configs,
+                                    load_prequantized=load_prequantized),)

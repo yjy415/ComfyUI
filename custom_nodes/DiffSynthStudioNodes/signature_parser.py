@@ -8,15 +8,6 @@ except Exception:
     Image = None
 
 _EXCLUDED = {"self", "progress_bar_cmd", "tqdm", "positive_only_lora", "negative_lora", "lora"}
-_OVERRIDES = {
-    ("ZImage", "num_inference_steps"): {"default": 8, "max": 50},
-    ("ZImage", "cfg_scale"): {"default": 1.0},
-    ("Flux", "embedded_guidance"): {"default": 3.5},
-    ("StableDiffusion", "num_inference_steps"): {"default": 50},
-    ("AceStep", "duration"): {"default": 60, "max": 300},
-    ("MiniMaxH3", "num_frames"): {"default": 124},
-    ("MiniMaxMusic3", "max_audio_duration"): {"default": 60.0, "max": 300.0},
-}
 
 
 def _is_image(annotation):
@@ -38,8 +29,8 @@ def _input_for(name, annotation, default):
             annotation = args[0]
     if annotation is str or annotation is inspect.Parameter.empty:
         value = "" if default is inspect.Parameter.empty else default
-        if name == "rand_device":
-            value = "cuda"
+        # if name == "rand_device":
+        #     value = "cuda"
         return ("STRING", {"default": value, "multiline": True})
     if annotation is bool:
         return ("BOOLEAN", {"default": False if default is inspect.Parameter.empty else default})
@@ -69,7 +60,7 @@ def parse_call_signature(pipeline_class, pipeline_type):
             continue
         spec = _input_for(name, parameter.annotation, parameter.default)
         spec_type, options = spec
-        options.update(_OVERRIDES.get((pipeline_type, name), {}))
+        # 这部分逻辑需要修改
         if parameter.default is None or _is_image(parameter.annotation) or spec_type == "*":
             optional[name] = spec
         else:

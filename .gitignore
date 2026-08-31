@@ -5,8 +5,12 @@ __pycache__/
 !/input/example.png
 /models/
 /temp/
-/custom_nodes/
+/custom_nodes/*
 !custom_nodes/example_node.py.example
+!custom_nodes/DiffSynthStudioNodes/
+!custom_nodes/DiffSynthStudioNodes/**
+custom_nodes/DiffSynthStudioNodes/**/__pycache__/
+custom_nodes/DiffSynthStudioNodes/**/*.pyc
 extra_model_paths.yaml
 /.vs
 .vscode/

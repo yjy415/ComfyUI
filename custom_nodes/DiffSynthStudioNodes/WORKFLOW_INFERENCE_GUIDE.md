@@ -300,11 +300,14 @@ audio -> AUDIO       -> SaveAudio
 1. 添加 `DiffSynthQuantizationConfig`。
 2. 选择已安装后端支持的 method。
 3. 单量化保持 `enable_mixed=false`。
-4. 混合量化设置 `enable_mixed=true`，并填写第二组 method 和模块规则。
-5. 将输出连接到需要量化的 ModelConfig 的 `quant_config`，通常是 transformer/DiT，而不是 tokenizer。
-6. 重新 Queue。因为模型配置改变，Pipeline Loader 会重新加载。
+4. 两种量化混合可设置 `enable_mixed=true`，并填写第二组 method 和模块规则。
+5. 三种及以上混合量化时，将前一个 Quantization Config 节点的输出连接到下一个节点的
+   `previous_config`；可继续串联任意数量。每组模块规则必须互不重叠，并在最后一个节点设置
+   `load_prequantized`。
+6. 将输出连接到需要量化的 ModelConfig 的 `quant_config`，通常是 transformer/DiT，而不是 tokenizer。
+7. 重新 Queue。因为模型配置改变，Pipeline Loader 会重新加载。
 
-`target_modules` 和 `exclude_modules` 使用逗号或换行分隔。模块集合必须与模型实际名称匹配，混合量化的两组目标不能重叠。
+`target_modules` 和 `exclude_modules` 使用逗号或换行分隔。模块集合必须与模型实际名称匹配，混合量化的各组目标不能重叠。
 
 预量化 checkpoint 应启用 `load_prequantized`；普通 BF16 checkpoint 不应仅靠打开该选项假装成预量化模型。
 
