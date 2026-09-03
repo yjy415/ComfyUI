@@ -17,16 +17,20 @@ class LoRAClearNode:
 class LoRALoadNode:
     @classmethod
     def INPUT_TYPES(cls):
-        return {"required": {"pipe": (PIPE,), "lora_config": (MODEL_CONFIG,)},
-                "optional": {"alpha": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.1})}}
+        return {"required": {
+            "pipe": (PIPE,),
+            "lora_config": (MODEL_CONFIG,),
+        }, "optional": {
+            "module": ("STRING", {"default": "dit", "multiline": False}),
+            "alpha": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
+        }}
     RETURN_TYPES = (PIPE,)
     RETURN_NAMES = ("pipe",)
     FUNCTION = "execute"
     CATEGORY = "DiffSynth/LoRA"
-    def execute(self, pipe, lora_config, alpha=1.0):
-        module = next((getattr(pipe, name) for name in ("dit", "unet", "video_dit")
-                       if getattr(pipe, name, None) is not None), None)
+    def execute(self, pipe, lora_config, module="dit", alpha=1.0):
+        module = pipe.get_module(pipe, module)
         if module is None:
-            raise ValueError("Pipeline has no supported LoRA target module")
+            raise ValueError(f"Pipeline has no module at '{module}'")
         pipe.load_lora(module, lora_config, alpha=alpha)
         return (pipe,)

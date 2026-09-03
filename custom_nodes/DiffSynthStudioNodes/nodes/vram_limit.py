@@ -6,7 +6,7 @@ class VRAMLimitNode:
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {
-            "device": ("STRING", {"default": "cuda"}),
+            "device": (["cuda", "cpu"], {"default": "cuda"}),
             "buffer_size": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 10, "step": 0.5}),
         }}
 
@@ -15,7 +15,7 @@ class VRAMLimitNode:
     FUNCTION = "execute"
     CATEGORY = "DiffSynth/config"
 
-    def execute(self, device="cuda", buffer_size=4.0):
+    def execute(self, device="cuda", buffer_size=0.5):
         try:
             if not torch.cuda.is_available():
                 return (float("inf"),)
