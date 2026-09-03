@@ -181,7 +181,7 @@ def _int_options(name, default):
     d = _safe_default(default, 0)
     options = {"default": d, "min": 0, "max": 2**32 - 1, "step": 1}
     if name in ("width", "height"):
-        options.update({"min": 64, "max": 4096, "step": 64, "default": _safe_default(default, 1024)})
+        options.update({"min": 64, "max": 4096, "default": _safe_default(default, 1024)})
     elif name == "num_frames":
         options.update({"min": 1, "max": 1000, "default": _safe_default(default, 81)})
     elif name == "num_inference_steps":
@@ -215,6 +215,18 @@ def parse_call_signature(pipeline_class, pipeline_type):
             required[name] = spec
         else:
             optional[name] = spec
+
+    for name, parameter in sig_params.items():
+        if name in _REQUIRED_INPUTS or parameter.default is not None:
+            continue
+        spec = optional.get(name)
+        if not isinstance(spec, tuple) or len(spec) < 2:
+            continue
+        spec_type = spec[0]
+        if isinstance(spec_type, str) and spec_type in ("INT", "FLOAT", "STRING", "BOOLEAN"):
+            opts = dict(spec[1])
+            opts["forceInput"] = True
+            optional[name] = (spec_type, opts)
 
     ordered_required = {}
     for name in _REQUIRED_INPUTS:

@@ -42,7 +42,7 @@ class MergeModelConfigsNode:
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {"model_config_1": (MODEL_CONFIG,)},
-                "optional": {f"model_config_{i}": (MODEL_CONFIG,) for i in range(2, 8)}}
+                "optional": {f"model_config_{i}": (MODEL_CONFIG,) for i in range(2, 9)}}
 
     RETURN_TYPES = (MODEL_CONFIG_LIST,)
     RETURN_NAMES = ("model_configs",)

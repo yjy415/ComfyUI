@@ -28,6 +28,7 @@ PIPELINE_REGISTRY = {
         PipelineMeta("Ideogram4", "Ideogram 4", "diffsynth.pipelines.ideogram4.Ideogram4Pipeline", "dit", "image"),
         PipelineMeta("HiDreamO1", "HiDream O1", "diffsynth.pipelines.hidream_o1_image.HiDreamO1ImagePipeline", "dit", "image"),
         PipelineMeta("WanVideo", "Wan Video", "diffsynth.pipelines.wan_video.WanVideoPipeline", "video_dit", "video"),
+        PipelineMeta("QwenVideoEdit", "Qwen Video Edit", "diffsynth.pipelines.qwen_video_edit.QwenVideoEditPipeline", "dit", "video"),
         PipelineMeta("LingBotVideo", "LingBot Video", "diffsynth.pipelines.lingbot_video.LingBotVideoPipeline", "dit", "video"),
         PipelineMeta("LTX2AudioVideo", "LTX-2 Audio Video", "diffsynth.pipelines.ltx2_audio_video.LTX2AudioVideoPipeline", "dit", "audio_video"),
         PipelineMeta("MiniMaxH3", "MiniMax H3", "diffsynth.pipelines.minimax_h3_audio_video.MiniMaxH3Pipeline", "dit", "audio_video"),

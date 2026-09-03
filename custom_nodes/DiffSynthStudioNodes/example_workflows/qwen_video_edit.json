@@ -1,17 +1,17 @@
 {
-  "last_node_id": 11,
-  "last_link_id": 12,
+  "last_node_id": 16,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
       "type": "DiffSynthVRAMConfig",
       "pos": [
-        20,
-        20
+        0,
+        0
       ],
       "size": {
-        "0": 280,
-        "1": 180
+        "0": 300,
+        "1": 200
       },
       "flags": {},
       "order": 0,
@@ -47,26 +47,21 @@
       "id": 2,
       "type": "DiffSynthModelConfig",
       "pos": [
-        340,
-        20
+        350,
+        0
       ],
       "size": {
-        "0": 320,
-        "1": 150
+        "0": 350,
+        "1": 120
       },
       "flags": {},
-      "order": 3,
+      "order": 1,
       "mode": 0,
       "inputs": [
         {
           "name": "vram_config",
           "type": "DIFFSYNTH_VRAM_CONFIG",
           "link": 1
-        },
-        {
-          "name": "quant_config",
-          "type": "DIFFSYNTH_QUANT_CONFIG",
-          "link": null
         }
       ],
       "outputs": [
@@ -83,34 +78,29 @@
         "Node name for S&R": "DiffSynthModelConfig"
       },
       "widgets_values": [
-        "AI-ModelScope/stable-diffusion-v1-5",
-        "text_encoder/model.safetensors"
+        "yunpeng1998/Qwen-Video-Edit",
+        "360P/step-30000.safetensors"
       ]
     },
     {
       "id": 3,
       "type": "DiffSynthModelConfig",
       "pos": [
-        340,
-        210
+        350,
+        160
       ],
       "size": {
-        "0": 320,
-        "1": 150
+        "0": 350,
+        "1": 120
       },
       "flags": {},
-      "order": 4,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
           "name": "vram_config",
           "type": "DIFFSYNTH_VRAM_CONFIG",
           "link": 2
-        },
-        {
-          "name": "quant_config",
-          "type": "DIFFSYNTH_QUANT_CONFIG",
-          "link": null
         }
       ],
       "outputs": [
@@ -127,34 +117,29 @@
         "Node name for S&R": "DiffSynthModelConfig"
       },
       "widgets_values": [
-        "AI-ModelScope/stable-diffusion-v1-5",
-        "unet/diffusion_pytorch_model.safetensors"
+        "Qwen/Qwen-Image",
+        "text_encoder/model*.safetensors"
       ]
     },
     {
       "id": 4,
       "type": "DiffSynthModelConfig",
       "pos": [
-        340,
-        400
+        350,
+        320
       ],
       "size": {
-        "0": 320,
-        "1": 150
+        "0": 350,
+        "1": 120
       },
       "flags": {},
-      "order": 5,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
           "name": "vram_config",
           "type": "DIFFSYNTH_VRAM_CONFIG",
           "link": 3
-        },
-        {
-          "name": "quant_config",
-          "type": "DIFFSYNTH_QUANT_CONFIG",
-          "link": null
         }
       ],
       "outputs": [
@@ -171,23 +156,23 @@
         "Node name for S&R": "DiffSynthModelConfig"
       },
       "widgets_values": [
-        "AI-ModelScope/stable-diffusion-v1-5",
-        "vae/diffusion_pytorch_model.safetensors"
+        "Wan-AI/Wan2.1-T2V-1.3B",
+        "Wan2.1_VAE.pth"
       ]
     },
     {
       "id": 5,
       "type": "DiffSynthMergeModelConfigs",
       "pos": [
-        700,
-        220
+        750,
+        120
       ],
       "size": {
-        "0": 280,
-        "1": 150
+        "0": 300,
+        "1": 200
       },
       "flags": {},
-      "order": 7,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
@@ -204,21 +189,6 @@
           "name": "model_config_3",
           "type": "DIFFSYNTH_MODEL_CONFIG",
           "link": 6
-        },
-        {
-          "name": "model_config_4",
-          "type": "DIFFSYNTH_MODEL_CONFIG",
-          "link": null
-        },
-        {
-          "name": "model_config_5",
-          "type": "DIFFSYNTH_MODEL_CONFIG",
-          "link": null
-        },
-        {
-          "name": "model_config_6",
-          "type": "DIFFSYNTH_MODEL_CONFIG",
-          "link": null
         }
       ],
       "outputs": [
@@ -240,34 +210,23 @@
       "id": 6,
       "type": "DiffSynthModelConfig",
       "pos": [
-        700,
-        430
+        350,
+        480
       ],
       "size": {
-        "0": 320,
-        "1": 150
+        "0": 350,
+        "1": 120
       },
       "flags": {},
-      "order": 1,
+      "order": 5,
       "mode": 0,
-      "inputs": [
-        {
-          "name": "vram_config",
-          "type": "DIFFSYNTH_VRAM_CONFIG",
-          "link": null
-        },
-        {
-          "name": "quant_config",
-          "type": "DIFFSYNTH_QUANT_CONFIG",
-          "link": null
-        }
-      ],
+      "inputs": [],
       "outputs": [
         {
           "name": "model_config",
           "type": "DIFFSYNTH_MODEL_CONFIG",
           "links": [
-            7
+            9
           ],
           "slot_index": 0
         }
@@ -276,23 +235,56 @@
         "Node name for S&R": "DiffSynthModelConfig"
       },
       "widgets_values": [
-        "AI-ModelScope/stable-diffusion-v1-5",
+        "Qwen/Qwen-Image",
         "tokenizer/"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "DiffSynthModelConfig",
+      "pos": [
+        350,
+        640
+      ],
+      "size": {
+        "0": 350,
+        "1": 120
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model_config",
+          "type": "DIFFSYNTH_MODEL_CONFIG",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DiffSynthModelConfig"
+      },
+      "widgets_values": [
+        "Qwen/Qwen-Image-Edit",
+        "processor/"
       ]
     },
     {
       "id": 8,
       "type": "DiffSynthVRAMLimit",
       "pos": [
-        700,
-        20
+        750,
+        360
       ],
       "size": {
-        "0": 240,
-        "1": 100
+        "0": 300,
+        "1": 80
       },
       "flags": {},
-      "order": 2,
+      "order": 7,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -300,7 +292,7 @@
           "name": "vram_limit",
           "type": "DIFFSYNTH_VRAM_LIMIT",
           "links": [
-            9
+            11
           ],
           "slot_index": 0
         }
@@ -315,14 +307,14 @@
     },
     {
       "id": 9,
-      "type": "DiffSynthStableDiffusionLoader",
+      "type": "DiffSynthQwenVideoEditLoader",
       "pos": [
-        1040,
-        180
+        1100,
+        200
       ],
       "size": {
-        "0": 340,
-        "1": 200
+        "0": 320,
+        "1": 320
       },
       "flags": {},
       "order": 8,
@@ -336,57 +328,23 @@
         {
           "name": "tokenizer_config",
           "type": "DIFFSYNTH_MODEL_CONFIG",
-          "link": 7
+          "link": 9
+        },
+        {
+          "name": "processor_config",
+          "type": "DIFFSYNTH_MODEL_CONFIG",
+          "link": 10
         },
         {
           "name": "vram_limit",
           "type": "DIFFSYNTH_VRAM_LIMIT",
-          "link": 9
-        }
-      ],
-      "outputs": [
-        {
-          "name": "pipe",
-          "type": "DIFFSYNTH_PIPE",
-          "links": [
-            11
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "DiffSynthStableDiffusionLoader"
-      },
-      "widgets_values": [
-        "bfloat16",
-        "cuda"
-      ]
-    },
-    {
-      "id": 10,
-      "type": "DiffSynthStableDiffusionInference",
-      "pos": [
-        1440,
-        180
-      ],
-      "size": {
-        "0": 380,
-        "1": 420
-      },
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "pipe",
-          "type": "DIFFSYNTH_PIPE",
           "link": 11
         }
       ],
       "outputs": [
         {
-          "name": "image",
-          "type": "IMAGE",
+          "name": "pipe",
+          "type": "DIFFSYNTH_PIPE",
           "links": [
             12
           ],
@@ -394,45 +352,259 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "DiffSynthStableDiffusionInference"
+        "Node name for S&R": "DiffSynthQwenVideoEditLoader"
       },
       "widgets_values": [
-        "",
-        42,
-        "fixed",
-        50,
-        512,
-        512,
-        "blurry, low quality, deformed"
+        "bfloat16",
+        "cuda"
       ]
     },
     {
-      "id": 11,
-      "type": "SaveImage",
+      "id": 14,
+      "type": "LoadVideo",
       "pos": [
-        1880,
-        180
+        750,
+        800
       ],
       "size": {
         "0": 300,
-        "1": 140
+        "1": 200
+      },
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            15
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadVideo"
+      },
+      "widgets_values": [
+        "source.mp4",
+        "auto",
+        "auto"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "GetVideoComponents",
+      "pos": [
+        1100,
+        800
+      ],
+      "size": {
+        "0": 300,
+        "1": 120
       },
       "flags": {},
       "order": 10,
       "mode": 0,
       "inputs": [
         {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 12
+          "name": "video",
+          "type": "VIDEO",
+          "link": 15
         }
       ],
-      "outputs": [],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            14
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "links": [],
+          "slot_index": 2
+        }
+      ],
       "properties": {
-        "Node name for S&R": "SaveImage"
+        "Node name for S&R": "GetVideoComponents"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 10,
+      "type": "DiffSynthQwenVideoEditInference",
+      "pos": [
+        1450,
+        200
+      ],
+      "size": {
+        "0": 400,
+        "1": 600
+      },
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pipe",
+          "type": "DIFFSYNTH_PIPE",
+          "link": 12
+        },
+        {
+          "name": "edit_video",
+          "type": "IMAGE",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "IMAGE",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DiffSynthQwenVideoEditInference"
       },
       "widgets_values": [
-        "DiffSynth/stable_diffusion_v1_5"
+        0,
+        "fixed",
+        40,
+        640,
+        384,
+        45,
+        "Transform the video into Japanese anime style"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "CreateVideo",
+      "pos": [
+        1900,
+        200
+      ],
+      "size": {
+        "0": 300,
+        "1": 200
+      },
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 13
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "widget": {
+            "min": 1.0,
+            "max": 120.0,
+            "step": 1.0,
+            "default": 30.0
+          }
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "bit_depth",
+          "type": "COMBO",
+          "widget": {
+            "options": [
+              "auto",
+              8,
+              10
+            ]
+          }
+        },
+        {
+          "name": "color_space",
+          "type": "COMBO",
+          "widget": {
+            "options": [
+              "sRGB",
+              "HDR",
+              "HDR PQ"
+            ]
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            16
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CreateVideo"
+      },
+      "widgets_values": [
+        16.0,
+        "auto",
+        "sRGB"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "SaveVideo",
+      "pos": [
+        2250,
+        200
+      ],
+      "size": {
+        "0": 340,
+        "1": 120
+      },
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveVideo"
+      },
+      "widgets_values": [
+        "DiffSynth/qwen_video_edit",
+        "auto",
+        {
+          "codec": "auto"
+        }
       ]
     }
   ],
@@ -486,14 +658,6 @@
       "DIFFSYNTH_MODEL_CONFIG"
     ],
     [
-      7,
-      6,
-      0,
-      9,
-      1,
-      "DIFFSYNTH_MODEL_CONFIG"
-    ],
-    [
       8,
       5,
       0,
@@ -503,14 +667,30 @@
     ],
     [
       9,
-      8,
+      6,
+      0,
+      9,
+      1,
+      "DIFFSYNTH_MODEL_CONFIG"
+    ],
+    [
+      10,
+      7,
       0,
       9,
       2,
-      "DIFFSYNTH_VRAM_LIMIT"
+      "DIFFSYNTH_MODEL_CONFIG"
     ],
     [
       11,
+      8,
+      0,
+      9,
+      3,
+      "DIFFSYNTH_VRAM_LIMIT"
+    ],
+    [
+      12,
       9,
       0,
       10,
@@ -518,18 +698,42 @@
       "DIFFSYNTH_PIPE"
     ],
     [
-      12,
+      13,
       10,
       0,
-      11,
+      12,
       0,
       "IMAGE"
+    ],
+    [
+      14,
+      15,
+      0,
+      10,
+      1,
+      "IMAGE"
+    ],
+    [
+      15,
+      14,
+      0,
+      15,
+      0,
+      "VIDEO"
+    ],
+    [
+      16,
+      12,
+      0,
+      13,
+      0,
+      "VIDEO"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
-    "ds_source_script": "examples/stable_diffusion/model_inference/stable-diffusion-v1-5.py",
+    "ds_source_script": "examples/qwen_video_edit/Qwen-Video-Edit.py",
     "ds_notes": ""
   },
   "version": 0.4

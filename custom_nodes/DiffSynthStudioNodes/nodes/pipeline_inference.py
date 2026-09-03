@@ -3,9 +3,8 @@ import json
 import numpy as np
 import torch
 from PIL import Image
-from typing import get_origin, get_args, Literal
 from ..pipeline_registry import PIPELINE_REGISTRY, get_pipeline_class
-from ..signature_parser import parse_call_signature, _is_image, _is_image_list, _unwrap_union, _tuple_annotation, _list_annotation, _REQUIRED_INPUTS
+from ..signature_parser import parse_call_signature, _is_image, _is_image_list, _tuple_annotation, _list_annotation, _REQUIRED_INPUTS
 from ..type_defs import PIPE
 
 
@@ -130,17 +129,6 @@ def _parameter_needs_conversion(annotation):
     return False
 
 
-def _is_default_value(value, comfy_default):
-    if isinstance(comfy_default, str):
-        return isinstance(value, str) and value.strip() == comfy_default.strip()
-    if isinstance(comfy_default, (int, float, bool)):
-        try:
-            return float(value) == float(comfy_default)
-        except (TypeError, ValueError):
-            return False
-    return value == comfy_default
-
-
 def _to_image(value):
     if isinstance(value, Image.Image):
         array = np.asarray(value.convert("RGB"), dtype=np.float32) / 255.0
@@ -191,70 +179,30 @@ def generate_inference_nodes():
         required, optional = parse_call_signature(get_pipeline_class(type_name), type_name)
         required = {"pipe": (PIPE,)} | required
 
-        _optional_defaults = {}
-        _optional_pipeline_none = set()
-        _pipe_sig = inspect.signature(get_pipeline_class(type_name).__call__).parameters
-        for _name, _spec in optional.items():
-            _spec_type = _spec[0] if isinstance(_spec, tuple) else None
-            _opts = _spec[1] if isinstance(_spec, tuple) and len(_spec) > 1 else {}
-            if isinstance(_spec_type, str) and _spec_type in ("INT", "FLOAT", "STRING", "BOOLEAN"):
-                _optional_defaults[_name] = _opts.get("default")
-            elif isinstance(_spec_type, list):
-                _optional_defaults[_name] = _opts.get("default")
-            _pparam = _pipe_sig.get(_name)
-            if _pparam is not None and (_pparam.default is None or
-                                        _pparam.default is inspect.Parameter.empty):
-                _optional_pipeline_none.add(_name)
-
-        def execute(self, _meta=meta, _opt_defaults=_optional_defaults,
-                    _opt_pipeline_none=_optional_pipeline_none, **kwargs):
+        def execute(self, _meta=meta, **kwargs):
             pipe = kwargs.pop("pipe")
-            sig = inspect.signature(pipe.__call__)
-            sig_params = sig.parameters
+            sig_params = inspect.signature(pipe.__call__).parameters
 
             call_kwargs = {}
 
+            # Required inputs: pass through if present and not None
             for name in _REQUIRED_INPUTS:
                 if name in kwargs and kwargs[name] is not None:
                     call_kwargs[name] = kwargs[name]
 
+            # All other inputs: pass through if in pipe signature and not None
             for name, value in kwargs.items():
                 if name in call_kwargs:
                     continue
                 if name not in sig_params:
                     continue
-
-                param = sig_params[name]
-                annotation = param.annotation
-                if _is_image(annotation) or _is_image_list(annotation):
-                    if value is not None:
-                        call_kwargs[name] = _convert_param(name, value, annotation)
-                    continue
-
-                unwrapped = _unwrap_union(annotation)
-                is_scalar = unwrapped in (str, int, float, bool) or unwrapped is inspect.Parameter.empty
-                is_list_tuple = (_tuple_annotation(annotation) is not None or
-                                 _list_annotation(annotation) is not None)
-                is_literal = get_origin(annotation) is Literal
-
-                if not (is_scalar or is_list_tuple or is_literal):
-                    if value is not None:
-                        call_kwargs[name] = value
-                    continue
-
-                comfy_default = _opt_defaults.get(name)
                 if value is None:
                     continue
-                if name not in _opt_pipeline_none:
-                    if _parameter_needs_conversion(annotation):
-                        value = _convert_param(name, value, annotation)
-                    call_kwargs[name] = value
-                    continue
-                if _is_default_value(value, comfy_default):
-                    continue
+                annotation = sig_params[name].annotation
                 if _parameter_needs_conversion(annotation):
-                    value = _convert_param(name, value, annotation)
-                call_kwargs[name] = value
+                    call_kwargs[name] = _convert_param(name, value, annotation)
+                else:
+                    call_kwargs[name] = value
 
             result = pipe(**call_kwargs)
             sample_rate = getattr(pipe, "audio_sample_rate", None)
